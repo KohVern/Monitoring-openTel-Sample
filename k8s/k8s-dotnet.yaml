@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-api
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "5170"
+    prometheus.io/path: /metrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-api
+  template:
+    metadata:
+      labels:
+        app: weather-api
+    spec:
+      containers:
+      - name: weather-api
+        image: weather-api:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5170
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Development"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-api-service
+spec:
+  type: NodePort
+  selector:
+    app: weather-api
+  ports:
+  - port: 5170
+    targetPort: 5170
+    nodePort: 30170  # External port (30000-32767 range)
