@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tempo
+  labels:
+    app: tempo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tempo
+  template:
+    metadata:
+      labels:
+        app: tempo
+    spec:
+      containers:
+        - name: tempo
+          image: grafana/tempo:latest
+          args:
+            - "-config.file=/etc/tempo/config.yaml"
+          ports:
+            - containerPort: 4317 # OTLP gRPC
+            - containerPort: 4318 # OTLP HTTP
+            - containerPort: 3200 # Tempo query
+          volumeMounts:
+            - name: tempo-config
+              mountPath: /etc/tempo
+            - name: tempo-storage
+              mountPath: /tmp/tempo
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+      volumes:
+        - name: tempo-config
+          configMap:
+            name: tempo-config
+        - name: tempo-storage
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tempo
+  labels:
+    app: tempo
+spec:
+  type: ClusterIP  # Changed from NodePort to ClusterIP for internal communication
+  ports:
+    - name: otlp-grpc
+      port: 4317
+      targetPort: 4317
+    - name: otlp-http
+      port: 4318
+      targetPort: 4318
+    - name: tempo-http
+      port: 3200
+      targetPort: 3200
+  selector:
+    app: tempo
+---
+# Optional: NodePort service for external access (debugging)
+apiVersion: v1
+kind: Service
+metadata:
+  name: tempo-external
+  labels:
+    app: tempo
+spec:
+  type: NodePort
+  ports:
+    - name: tempo-http
+      port: 3200
+      targetPort: 3200
+      nodePort: 32000
+  selector:
+    app: tempo
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tempo-config
+data:
+  config.yaml: |
+    server:
+      http_listen_port: 3200
+      grpc_listen_port: 9095
+      log_level: info
+
+    distributor:
+      receivers:
+        otlp:
+          protocols:
+            grpc:
+              endpoint: 0.0.0.0:4317
+            http:
+              endpoint: 0.0.0.0:4318
+
+    ingester:
+      lifecycler:
+        ring:
+          kvstore:
+            store: inmemory
+          replication_factor: 1
+        join_after: 0s
+        min_ready_duration: 5s
+        final_sleep: 0s
+      trace_idle_period: 10s
+      max_block_duration: 5m
+
+    storage:
+      trace:
+        backend: local
+        local:
+          path: /tmp/tempo/traces
+
+    compactor:
+      compaction:
+        block_retention: 1h
+
+    query_frontend:
+      search:
+        duration_slo: 5s
+      trace_by_id:
+        duration_slo: 5s
+
+    querier:
+      frontend_worker:
+        # Use localhost since all components run in same pod
+        frontend_address: localhost:9095
+        dns_lookup_duration: 1s
+        parallelism: 2

@@ -74,3 +74,6 @@ C:\Users\Kohve\OneDrive\Desktop\OTEL demo\weather\obj\Debug\net9.0\refint\weathe
 C:\Users\Kohve\OneDrive\Desktop\OTEL demo\weather\obj\Debug\net9.0\weather.pdb
 C:\Users\Kohve\OneDrive\Desktop\OTEL demo\weather\obj\Debug\net9.0\weather.genruntimeconfig.cache
 C:\Users\Kohve\OneDrive\Desktop\OTEL demo\weather\obj\Debug\net9.0\ref\weather.dll
+C:\Users\Kohve\OneDrive\Desktop\OTEL demo\weather\bin\Debug\net9.0\OpenTelemetry.Exporter.OpenTelemetryProtocol.dll
+C:\Users\Kohve\OneDrive\Desktop\OTEL demo\weather\bin\Debug\net9.0\OpenTelemetry.Instrumentation.Http.dll
+C:\Users\Kohve\OneDrive\Desktop\OTEL demo\weather\bin\Debug\net9.0\OpenTelemetry.Exporter.Console.dll

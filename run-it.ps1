@@ -2,6 +2,9 @@
 kubectl annotate svc weather-api-service prometheus.io/scrape="true" --overwrite
 kubectl annotate svc weather-api-service prometheus.io/port="5170" --overwrite
 kubectl annotate svc weather-api-service prometheus.io/path="metrics" --overwrite
+kubectl annotate svc payment-api-service prometheus.io/scrape="true" --overwrite
+kubectl annotate svc payment-api-service prometheus.io/port="5180" --overwrite
+kubectl annotate svc payment-api-service prometheus.io/path="metrics" --overwrite
 kubectl annotate svc cadvisor prometheus.io/scrape="true" --overwrite
 kubectl annotate svc cadvisor prometheus.io/port="8080" --overwrite
 kubectl annotate svc cadvisor prometheus.io/path="metrics" --overwrite

@@ -11,36 +11,42 @@ data:
           - job_name: 'kubernetes-services'
             kubernetes_sd_configs:
               - role: endpoints
-
             relabel_configs:
-              # Only scrape services with prometheus.io/scrape: "true"
               - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
                 action: keep
                 regex: true
-              
               - source_labels: [__meta_kubernetes_service_name]
                 target_label: kubernetes_service_name
-
-              # Set metrics path from annotation, default to /metrics
               - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
                 action: replace
                 target_label: __metrics_path__
                 regex: (.+)
                 replacement: $1
-
-              # Set port from annotation
               - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
                 action: replace
                 target_label: __address__
                 regex: (.+):(?:\d+);(\d+)
                 replacement: $1:$2
 
+      otlp:
+        protocols:
+          http:
+          grpc:
+
     exporters:
       prometheus:
         endpoint: "0.0.0.0:8889"
+      otlp/tempo:
+        endpoint: tempo:4317  # e.g., tempo.default.svc.cluster.local:4317
+        tls:
+          insecure: true
 
     service:
       pipelines:
         metrics:
           receivers: [prometheus]
           exporters: [prometheus]
+
+        traces:
+          receivers: [otlp]
+          exporters: [otlp/tempo]

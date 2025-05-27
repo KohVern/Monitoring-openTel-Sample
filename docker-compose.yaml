@@ -7,8 +7,27 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command: 
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--web.enable-remote-write-receiver"
+
+  tempo:
+    image: grafana/tempo:latest
+    user: root
+    command: ["-config.file=/etc/tempo/config.yaml"]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo/config.yaml
+      - tempo-data:/tmp/tempo
+    ports:
+      - "3200:3200"     # Tempo UI
+      - "4317:4317"     # OTLP gRPC
+      - "4318:4318"     # OTLP HTTP
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:latest
     ports:
       - "3000:3000"
+
+volumes:
+  tempo-data:
+  grafana-storage:
