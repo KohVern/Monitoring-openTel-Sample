@@ -36,7 +36,7 @@ builder.Services.AddOpenTelemetry()
             .AddHttpClientInstrumentation()
             .AddOtlpExporter(otlpOptions =>
             {
-                otlpOptions.Endpoint = new Uri("http://localhost:4317"); // Update to your Tempo OTLP endpoint
+                otlpOptions.Endpoint = new Uri("http://tempo:4317"); // Update to your Tempo OTLP endpoint
                 otlpOptions.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc; // default
             });
     });
@@ -79,7 +79,7 @@ app.MapGet("/test", async (IHttpClientFactory httpClientFactory) =>
     var client = httpClientFactory.CreateClient();
 
     // Simulate call to Payment Service (e.g., http://payment-service/payment)
-    var paymentResponse = await client.GetAsync("http://localhost:5180/payment");
+    var paymentResponse = await client.GetAsync("http://payment-api:5180/payment");
 
     // Simulate call to Inventory Service (e.g., http://inventory-service/inventory)
     //var inventoryResponse = await client.PostAsync("http://inventory-service/inventory", null);
