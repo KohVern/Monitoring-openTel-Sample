@@ -79,7 +79,7 @@ app.MapGet("/test", async (IHttpClientFactory httpClientFactory) =>
     var client = httpClientFactory.CreateClient();
 
     // Simulate call to Payment Service (e.g., http://payment-service/payment)
-    var paymentResponse = await client.GetAsync("http://localhost:5180/payment");
+    var paymentResponse = await client.GetAsync("http://payment-api-service:5180/payment");
 
     // Simulate call to Inventory Service (e.g., http://inventory-service/inventory)
     //var inventoryResponse = await client.PostAsync("http://inventory-service/inventory", null);
