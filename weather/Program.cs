@@ -5,6 +5,8 @@ using OpenTelemetry;
 using OpenTelemetry.Instrumentation.Http;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Exporter.Prometheus;
+using OpenTelemetry.Instrumentation.Runtime;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,8 @@ builder.Services.AddOpenTelemetry()
     {
         x.AddPrometheusExporter();
         x.AddAspNetCoreInstrumentation();
+        x.AddRuntimeInstrumentation();
+        x.AddHttpClientInstrumentation();
         x.AddMeter(
                 "Microsoft.AspNetCore.Hosting",
                 "Microsoft.AspNetCore.Server.Kestrel");
@@ -78,13 +82,33 @@ app.MapGet("/test", async (IHttpClientFactory httpClientFactory) =>
 {
     var client = httpClientFactory.CreateClient();
 
-    // Simulate call to Payment Service (e.g., http://payment-service/payment)
     var paymentResponse = await client.GetAsync("http://payment-api:5180/payment");
 
-    // Simulate call to Inventory Service (e.g., http://inventory-service/inventory)
-    //var inventoryResponse = await client.PostAsync("http://inventory-service/inventory", null);
+    if (!paymentResponse.IsSuccessStatusCode)
+    {
+        return Results.Problem("Failed to call Payment Service");
+    }
 
-    return "Test endpoint hit successfully! Response from Payment Service: " + await paymentResponse.Content.ReadAsStringAsync();
+    var json = await paymentResponse.Content.ReadAsStringAsync();
+
+    try
+    {
+        var deserialized = JsonSerializer.Deserialize<object>(json);
+        return Results.Ok(new
+        {
+            Message = "Test endpoint hit successfully!",
+            PaymentServiceResponse = deserialized
+        });
+    }
+    catch (JsonException)
+    {
+        // Return raw if not valid JSON
+        return Results.Ok(new
+        {
+            Message = "Test endpoint hit successfully!",
+            RawResponse = json
+        });
+    }
 })
 .WithName("getTest");
 

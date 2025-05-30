@@ -4,6 +4,8 @@ using OpenTelemetry.Trace;
 using OpenTelemetry;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Exporter.Prometheus;
+using OpenTelemetry.Instrumentation.Runtime;
+using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,8 @@ builder.Services.AddOpenTelemetry()
     {
         x.AddPrometheusExporter();
         x.AddAspNetCoreInstrumentation();
+        x.AddRuntimeInstrumentation();
+        x.AddHttpClientInstrumentation();
         x.AddMeter(
                 "Microsoft.AspNetCore.Hosting",
                 "Microsoft.AspNetCore.Server.Kestrel");
@@ -53,11 +57,31 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.MapPrometheusScrapingEndpoint();
 
-app.MapGet("/payment", async () =>
+app.MapGet("/payment", async (IConfiguration config) =>
 {
-    await Task.Delay(300); // Simulate work
-    var ID = Random.Shared.Next(1000, 9999);
-    return Results.Ok($"Payment ID: {ID}");
+    var connectionString = config.GetConnectionString("MySql");
+    var games = new List<object>();
+
+    await using var connection = new MySqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    var query = "SELECT game_id, title, platform, price, stock FROM game";
+    await using var cmd = new MySqlCommand(query, connection);
+    await using var reader = await cmd.ExecuteReaderAsync();
+
+    while (await reader.ReadAsync())
+    {
+        games.Add(new
+        {
+            GameId = reader.GetInt32("game_id"),
+            Title = reader.GetString("title"),
+            Platform = reader.GetString("platform"),
+            Price = reader.GetDecimal("price"),
+            Stock = reader.GetInt32("stock")
+        });
+    }
+
+    return Results.Ok(games);
 });
 
 app.MapControllers();

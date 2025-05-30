@@ -28,6 +28,14 @@ services:
       - /sys:/sys
       - /var/lib/docker:/var/lib/docker:ro
 
+  mysqld-exporter:
+    image: prom/mysqld-exporter
+    ports:
+      - "9104:9104"
+    command:
+     - "--mysqld.username=root:root"
+     - "--mysqld.address=host.docker.internal:3306"
+
   otel-collector:
     image: otel/opentelemetry-collector-contrib:latest
     command: ["--config=/etc/otel/config.yaml"]

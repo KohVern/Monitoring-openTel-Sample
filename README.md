@@ -9,22 +9,26 @@ Sample weather,payment service with Cadvisor, node-exporter to be scrapped by ot
 - [.NET 9.0](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 
 ## Services: [port]
-- Weather-App: 5170
-- Payment-App: 5180
-- cAdvisor: 8080
-- Node-Exporter: 9100
+- Weather-App   : 5170
+- Payment-App   : 5180
+- cAdvisor      : 8080
+- Node-Exporter : 9100
 - otel-collector: 8889
-- Prometheus: 9090
-- Grafana: 3000
+- Prometheus    : 9090
+- Grafana       : 3000
+- mySQL         : 3306
+- mySQL-Exporter: 9104
 
 ## Usage in Main branch
 ### Docker-Compose
 ```cmd
 docker-compose up
 ```
+Be sure to run Wamp-Server for mySQL @ port: 3306
+- Adjust passwords accordingly (this is for POC)
 ## Usage in branch k8s-poc
 ### Minikube (Kubernetes)
-- For lines 3 - 5 use separate terminals
+- Use separate terminals
 ---
 Load image into minikube
 [In weather directory]
@@ -59,5 +63,6 @@ docker-compose up
 ## Grafana sample dashboards
 
 - Cluster monitoring: 315
-- cAdvisor metrics: 19792
-- Node exporter: 1860
+- cAdvisor metrics  : 19792
+- Node exporter     : 1860
+- SQL-Metrics       : 14057
