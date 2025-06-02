@@ -4,12 +4,13 @@
   become: true
   tasks:
     - name: Git pull latest code
-      shell: su - ec2-user -c "cd /home/ec2-user/Monitoring-openTel-Sample && git pull"
+      shell: su - ec2-user -c "cd Monitoring-openTel-Sample && git pull"
       tags: [pull]
+
     - name: Docker compose up
       shell: su - ec2-user -c "cd Monitoring-openTel-Sample && docker compose up -d"
       tags: [start]
 
     - name: Docker compose down
-      shell: su - ec2-user -c "cd /home/ec2-user/Monitoring-openTel-Sample && docker compose down"
+      shell: su - ec2-user -c "cd Monitoring-openTel-Sample && docker compose down"
       tags: [stop]
