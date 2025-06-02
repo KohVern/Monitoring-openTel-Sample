@@ -1,0 +1,39 @@
+---
+- name: EC2 setup using shell commands
+  hosts: ec2
+  become: true
+
+  tasks:
+    - name: Update packages
+      shell: yum update -y
+
+    - name: Install required packages
+      shell: yum install -y git docker wget
+
+    - name: Start Docker
+      shell: service docker start
+
+    - name: Add ec2-user to docker group
+      shell: usermod -aG docker ec2-user
+
+    - name: Create Docker Compose plugin directory
+      shell: mkdir -p /home/ec2-user/.docker/cli-plugins
+
+    - name: Download Docker Compose
+      shell: |
+        curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 \
+          -o /home/ec2-user/.docker/cli-plugins/docker-compose && \
+        chmod +x /home/ec2-user/.docker/cli-plugins/docker-compose && \
+        chown -R ec2-user:ec2-user /home/ec2-user/.docker
+
+    - name: Download and install cloudflared
+      shell: |
+        wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 && \
+        mv cloudflared-linux-amd64 /usr/local/bin/cloudflared && \
+        chmod +x /usr/local/bin/cloudflared
+
+    - name: Clone your repo
+      shell: su - ec2-user -c "git clone https://github.com/KohVern/Monitoring-openTel-Sample"
+
+    - name: Docker compose up
+      shell: su - ec2-user -c "cd Monitoring-openTel-Sample && docker compose up -d"
