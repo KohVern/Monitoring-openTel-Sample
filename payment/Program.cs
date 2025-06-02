@@ -18,6 +18,8 @@ builder.Services.AddOpenTelemetry()
     {
         x.AddPrometheusExporter();
         x.AddAspNetCoreInstrumentation();
+        x.AddRuntimeInstrumentation();
+        x.AddHttpClientInstrumentation();
         x.AddMeter(
                 "Microsoft.AspNetCore.Hosting",
                 "Microsoft.AspNetCore.Server.Kestrel");

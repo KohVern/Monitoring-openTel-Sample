@@ -38,3 +38,4 @@ C:\Users\Kohve\OneDrive\Desktop\OTEL demo\payment\obj\Debug\net9.0\refint\paymen
 C:\Users\Kohve\OneDrive\Desktop\OTEL demo\payment\obj\Debug\net9.0\payment.pdb
 C:\Users\Kohve\OneDrive\Desktop\OTEL demo\payment\obj\Debug\net9.0\payment.genruntimeconfig.cache
 C:\Users\Kohve\OneDrive\Desktop\OTEL demo\payment\obj\Debug\net9.0\ref\payment.dll
+C:\Users\Kohve\OneDrive\Desktop\OTEL demo\payment\bin\Debug\net9.0\OpenTelemetry.Instrumentation.Runtime.dll

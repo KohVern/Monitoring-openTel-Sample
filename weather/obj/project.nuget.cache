@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "kWpf4WKBrOk=",
+  "dgSpecHash": "G91o2YPhGZc=",
   "success": true,
   "projectFilePath": "C:\\Users\\Kohve\\OneDrive\\Desktop\\OTEL demo\\weather\\weather.csproj",
   "expectedPackageFiles": [
@@ -30,6 +30,7 @@
     "C:\\Users\\Kohve\\.nuget\\packages\\opentelemetry.extensions.hosting\\1.12.0\\opentelemetry.extensions.hosting.1.12.0.nupkg.sha512",
     "C:\\Users\\Kohve\\.nuget\\packages\\opentelemetry.instrumentation.aspnetcore\\1.12.0\\opentelemetry.instrumentation.aspnetcore.1.12.0.nupkg.sha512",
     "C:\\Users\\Kohve\\.nuget\\packages\\opentelemetry.instrumentation.http\\1.12.0\\opentelemetry.instrumentation.http.1.12.0.nupkg.sha512",
+    "C:\\Users\\Kohve\\.nuget\\packages\\opentelemetry.instrumentation.runtime\\1.12.0\\opentelemetry.instrumentation.runtime.1.12.0.nupkg.sha512",
     "C:\\Users\\Kohve\\.nuget\\packages\\swashbuckle.aspnetcore\\8.1.1\\swashbuckle.aspnetcore.8.1.1.nupkg.sha512",
     "C:\\Users\\Kohve\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\8.1.1\\swashbuckle.aspnetcore.swagger.8.1.1.nupkg.sha512",
     "C:\\Users\\Kohve\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\8.1.1\\swashbuckle.aspnetcore.swaggergen.8.1.1.nupkg.sha512",
