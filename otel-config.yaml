@@ -42,7 +42,7 @@ service:
   pipelines:
     metrics:
       receivers: [prometheus]
-      exporters: [prometheus, awsprometheusremotewrite]
+      exporters: [prometheus, prometheusremotewrite]
     traces:
       receivers: [otlp]
       exporters: [otlp/tempo]
