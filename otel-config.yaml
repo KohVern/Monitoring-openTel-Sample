@@ -1,4 +1,4 @@
-extentions:
+extensions:
   sigv4auth:
     region: ap-southeast-1
     service: aps
@@ -38,7 +38,7 @@ exporters:
       authenticator: sigv4auth
 
 service:
-  extentions: [sigv4auth]
+  extensions: [sigv4auth]
   pipelines:
     metrics:
       receivers: [prometheus]
