@@ -29,7 +29,7 @@ services:
       - /var/lib/docker:/var/lib/docker:ro
 
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
+    image: public.ecr.aws/aws-observability/aws-otel-collector:latest
     command: ["--config=/etc/otel/config.yaml"]
     volumes:
       - ./otel-config.yaml:/etc/otel/config.yaml

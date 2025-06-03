@@ -1,3 +1,8 @@
+extentions:
+  sigv4auth:
+    region: ap-southeast-1
+    service: aps
+
 receivers:
   prometheus:
     config:
@@ -27,11 +32,13 @@ exporters:
     endpoint: tempo:4317
     tls:
       insecure: true
-  awsprometheusremotewrite:
-    region: ap-southeast-1
+  prometheusremotewrite:
     endpoint: https://aps-workspaces.ap-southeast-1.amazonaws.com/workspaces/ws-8f238eef-b22a-4b6b-b6b0-f669e33105b4/api/v1/remote_write
+    auth:
+      authenticator: sigv4auth
 
 service:
+  extentions: [sigv4auth]
   pipelines:
     metrics:
       receivers: [prometheus]
