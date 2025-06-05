@@ -6,6 +6,8 @@ extensions:
 receivers:
   prometheus:
     config:
+      global:
+        scrape_interval: 15s
       scrape_configs:
         - job_name: 'weather-api'
           static_configs:
@@ -28,10 +30,7 @@ receivers:
 exporters:
   prometheus:
     endpoint: "0.0.0.0:8889"
-  otlp/tempo:
-    endpoint: tempo:4317
-    tls:
-      insecure: true
+  awsxray: {}
   prometheusremotewrite:
     endpoint: https://aps-workspaces.ap-southeast-1.amazonaws.com/workspaces/ws-9e1359fc-7298-47be-841c-e5f84f5e4e5a/api/v1/remote_write
     auth:
@@ -45,4 +44,4 @@ service:
       exporters: [prometheus, prometheusremotewrite]
     traces:
       receivers: [otlp]
-      exporters: [otlp/tempo]
+      exporters: [awsxray]

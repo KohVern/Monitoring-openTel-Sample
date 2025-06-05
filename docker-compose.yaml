@@ -35,6 +35,7 @@ services:
       - ./otel-config.yaml:/etc/otel/config.yaml
     ports:
       - "8889:8889"  # Prometheus scrape endpoint
+      - "4317:4317"  # OTLP gRPC endpoint
 
   prometheus:
     image: prom/prometheus
@@ -46,17 +47,17 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--web.enable-remote-write-receiver"
 
-  tempo:
-    image: grafana/tempo:latest
-    user: root
-    command: ["-config.file=/etc/tempo/config.yaml"]
-    volumes:
-      - ./tempo-config.yaml:/etc/tempo/config.yaml
-      - tempo-data:/tmp/tempo
-    ports:
-      - "3200:3200"     # Tempo UI
-      - "4317:4317"     # OTLP gRPC
-      - "4318:4318"     # OTLP HTTP
+  # tempo:
+  #   image: grafana/tempo:latest
+  #   user: root
+  #   command: ["-config.file=/etc/tempo/config.yaml"]
+  #   volumes:
+  #     - ./tempo-config.yaml:/etc/tempo/config.yaml
+  #     - tempo-data:/tmp/tempo
+  #   ports:
+  #     - "3200:3200"     # Tempo UI
+  #     - "4317:4317"     # OTLP gRPC
+  #     - "4318:4318"     # OTLP HTTP
 
   grafana:
     image: grafana/grafana:latest
@@ -64,5 +65,5 @@ services:
       - "3000:3000"
 
 volumes:
-  tempo-data:
+  # tempo-data:
   grafana-storage:

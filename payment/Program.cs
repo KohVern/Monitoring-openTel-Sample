@@ -40,7 +40,7 @@ builder.Services.AddOpenTelemetry()
             .AddHttpClientInstrumentation()
             .AddOtlpExporter(otlpOptions =>
             {
-                otlpOptions.Endpoint = new Uri("http://tempo:4317"); // Update to your Tempo OTLP endpoint
+                otlpOptions.Endpoint = new Uri("http://otel-collector:4317"); // Update to your Tempo OTLP endpoint
                 otlpOptions.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc; // default
             });
     });
