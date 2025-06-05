@@ -36,6 +36,11 @@ services:
     ports:
       - "8889:8889"  # Prometheus scrape endpoint
       - "4317:4317"  # OTLP gRPC endpoint
+      - "4318:4318"  # OTLP HTTP endpoint
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=ap-southeast-1
 
   prometheus:
     image: prom/prometheus
