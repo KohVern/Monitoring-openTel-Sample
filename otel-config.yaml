@@ -35,7 +35,7 @@ exporters:
     region: ap-southeast-1
     no_verify_ssl: false
   prometheusremotewrite:
-    endpoint: https://aps-workspaces.ap-southeast-1.amazonaws.com/workspaces/ws-9e1359fc-7298-47be-841c-e5f84f5e4e5a/api/v1/remote_write
+    endpoint: ${PROM_REMOTE_WRITE}
     auth:
       authenticator: sigv4auth
 

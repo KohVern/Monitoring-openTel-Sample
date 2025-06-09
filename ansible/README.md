@@ -6,9 +6,13 @@ ec2-setup: In existing EC2 setup Required files
 docker-commands: Start/Stop docker compose
 
 ### AWS commands
-ssh -i ~/monitoring.pem ec2-user@ec2-52-221-164-168.ap-southeast-1.compute.amazonaws.com
-aws ec2 start-instances --instance-ids i-0de158030cdbab7f5 --region ap-southeast-1
-aws ec2 stop-instances --instance-ids i-0de158030cdbab7f5 --region ap-southeast-1
+ssh -i ~/monitoring.pem ec2-user@ec2-18-138-248-103.ap-southeast-1.compute.amazonaws.com
+
+aws ec2 describe-instances --instance-ids i-0ec4d96283d83c44c --query "Reservations[*].Instances[*].PublicIpAddress"
+
+aws ec2 start-instances --instance-ids i-0ec4d96283d83c44c --region ap-southeast-1
+
+aws ec2 stop-instances --instance-ids i-0ec4d96283d83c44c --region ap-southeast-1
 
 ### Open Cloudflare for https sample connection
 cloudflared tunnel --url http://localhost:3000

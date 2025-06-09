@@ -1,1 +1,17 @@
 .env
+
+# Ignore Terraform state files
+*.tfstate
+*.tfstate.backup
+
+# Ignore Terraform's lock file
+.terraform.lock.hcl
+
+# Ignore Terraform working directory
+.terraform/
+
+# Optional: Ignore crash logs
+crash.log
+
+# Optional: Ignore plan output
+*.tfplan
