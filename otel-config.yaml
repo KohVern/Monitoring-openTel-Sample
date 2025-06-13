@@ -1,8 +1,3 @@
-extensions:
-  sigv4auth:
-    region: ap-southeast-1
-    service: aps
-
 receivers:
   prometheus:
     config:
@@ -32,17 +27,12 @@ exporters:
     endpoint: tempo:4317
     tls:
       insecure: true
-  prometheusremotewrite:
-    endpoint: https://aps-workspaces.ap-southeast-1.amazonaws.com/workspaces/ws-9e1359fc-7298-47be-841c-e5f84f5e4e5a/api/v1/remote_write
-    auth:
-      authenticator: sigv4auth
 
 service:
-  extensions: [sigv4auth]
   pipelines:
     metrics:
       receivers: [prometheus]
-      exporters: [prometheus, prometheusremotewrite]
+      exporters: [prometheus]
     traces:
       receivers: [otlp]
       exporters: [otlp/tempo]

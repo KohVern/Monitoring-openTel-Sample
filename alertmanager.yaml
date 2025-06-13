@@ -1,0 +1,16 @@
+global:
+  smtp_smarthost: 'mailhog:1025'
+  smtp_from: 'alertmanager@example.com'
+  smtp_hello: 'localhost'
+
+receivers:
+  - name: 'email-alert'
+    email_configs:
+      - to: 'you@example.com'
+        send_resolved: true
+
+route:
+  receiver: 'email-alert'
+  group_wait: 10s
+  group_interval: 30s
+  repeat_interval: 1h
