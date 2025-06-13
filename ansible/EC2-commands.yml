@@ -1,0 +1,26 @@
+---
+- name: EC2 Commands
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    aws_region: 'ap-southeast-1'
+    instance_id: 'i-0ec4d96283d83c44c'
+  tasks:
+    - name: Start an EC2 instance
+      amazon.aws.ec2_instance:
+        instance_ids:
+          - "{{ instance_id }}"
+        state: started
+        region: "{{ aws_region }}"
+        wait: true
+      tags: [ec2_start]
+
+    - name: Stop an EC2 instance
+      amazon.aws.ec2_instance:
+        instance_ids:
+          - "{{ instance_id }}"
+        state: stopped
+        region: "{{ aws_region }}"
+        wait: true
+      tags: [ec2_stop]
