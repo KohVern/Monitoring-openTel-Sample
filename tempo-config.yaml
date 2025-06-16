@@ -10,8 +10,6 @@ distributor:
       protocols:
         grpc:
           endpoint: 0.0.0.0:4317
-        http:
-          endpoint: 0.0.0.0:4318
 
 ingester:
   lifecycler:
@@ -60,4 +58,4 @@ query_frontend:
 
 querier:
   frontend_worker:
-    frontend_address: 127.0.0.1:9095
+    frontend_address: 127.0.0.1:9095 # (Neeeded) Grafana doesn’t talk directly to the querier. Instead, it sends trace queries to Tempo’s Query Frontend
