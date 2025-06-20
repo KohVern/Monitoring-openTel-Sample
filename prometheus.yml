@@ -8,8 +8,8 @@ scrape_configs:
       - targets: ['otel-collector:8889']
   - job_name: 'tempo'
     static_configs:
-      - targets: ['tempo:3200']
+      - targets: ['host.docker.internal:3200']
 
 remote_write:
-  - url: 'http://tempo:3200/api/v1/receive'
+  - url: 'http://host.docker.internal:3200/api/v1/receive'
   

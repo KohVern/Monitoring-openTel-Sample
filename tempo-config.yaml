@@ -1,3 +1,5 @@
+auth_enabled: false
+
 server:
   http_listen_address: 0.0.0.0
   http_listen_port: 3200
@@ -15,13 +17,22 @@ ingester:
   lifecycler:
     ring:
       kvstore:
-        store: inmemory
+        store: memberlist
       replication_factor: 1
     join_after: 0s
     min_ready_duration: 5s
     final_sleep: 0s
   trace_idle_period: 10s
   max_block_duration: 5m
+
+memberlist:
+  bind_port: 7946
+  join_members:
+    - tempo-distributor:7946
+    - tempo-ingester:7946
+    - tempo-querier:7946
+    - tempo-query-frontend:7946
+    - tempo-metrics-generator:7946
 
 storage:
   trace:
@@ -41,7 +52,7 @@ metrics_generator:
   storage:
     path: /tmp/tempo/generator/wal
     remote_write:
-      - url: http://prometheus:9090/api/v1/write
+      - url: http://host.docker.internal:9090/api/v1/write
         send_exemplars: true
 overrides:
   defaults:
@@ -58,4 +69,4 @@ query_frontend:
 
 querier:
   frontend_worker:
-    frontend_address: 127.0.0.1:9095 # (Neeeded) Grafana doesn’t talk directly to the querier. Instead, it sends trace queries to Tempo’s Query Frontend
+    frontend_address: tempo-query-frontend:9095 # (Neeeded) Grafana doesn’t talk directly to the querier. Instead, it sends trace queries to Tempo’s Query Frontend

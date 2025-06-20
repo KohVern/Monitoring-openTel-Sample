@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  tempo-distributor:
+    image: grafana/tempo:latest
+    user: root
+    command: ["-config.file=/etc/tempo/tempo.yaml", "-target=distributor"]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo/tempo.yaml
+      - tempo-data:/tmp/tempo
+    ports:
+      - "4317:4317" # OTLP gRPC
+
+  tempo-ingester:
+    image: grafana/tempo:latest
+    user: root
+    command: ["-config.file=/etc/tempo/tempo.yaml", "-target=ingester"]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo/tempo.yaml
+      - tempo-data:/tmp/tempo
+
+  tempo-querier:
+    image: grafana/tempo:latest
+    user: root
+    command: ["-config.file=/etc/tempo/tempo.yaml", "-target=querier"]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo/tempo.yaml
+      - tempo-data:/tmp/tempo
+
+  tempo-query-frontend:
+    image: grafana/tempo:latest
+    user: root
+    command: ["-config.file=/etc/tempo/tempo.yaml", "-target=query-frontend"]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo/tempo.yaml
+      - tempo-data:/tmp/tempo
+    ports:
+      - "3200:3200" # HTTP UI/Query
+
+  tempo-compactor:
+    image: grafana/tempo:latest
+    user: root
+    command: ["-config.file=/etc/tempo/tempo.yaml", "-target=compactor"]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo/tempo.yaml
+      - tempo-data:/tmp/tempo
+
+  tempo-metrics-generator:
+    image: grafana/tempo:latest
+    user: root
+    command: ["-config.file=/etc/tempo/tempo.yaml", "-target=metrics-generator"]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo/tempo.yaml
+      - tempo-data:/tmp/tempo
+
+volumes:
+  tempo-data:
