@@ -16,7 +16,7 @@ data:
 
       - job_name: 'tempo'
         static_configs:
-          - targets: ['tempo.default.svc.cluster.local:3200']
+          - targets: ['tempo-query-frontend.default.svc.cluster.local:3200']
 
 ---
 apiVersion: apps/v1

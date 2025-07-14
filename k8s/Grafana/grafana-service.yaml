@@ -31,3 +31,12 @@ data:
         isDefault: true
         version: 1
         editable: true
+
+      - name: Tempo
+        type: tempo
+        access: proxy
+        orgId: 1
+        url: http://tempo-query-frontend.default.svc.cluster.local:3200
+        isDefault: false
+        version: 1
+        editable: true

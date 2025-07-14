@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tempo-compactor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tempo
+      component: compactor
+  template:
+    metadata:
+      labels:
+        app: tempo
+        component: compactor
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: tempo
+          image: grafana/tempo:latest
+          args:
+            - "-config.file=/etc/tempo/config.yaml"
+            - "-target=compactor"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/tempo
+            - name: tempo-storage
+              mountPath: /tmp/tempo
+      volumes:
+        - name: config-volume
+          configMap:
+            name: tempo-config
+        - name: tempo-storage
+          persistentVolumeClaim:
+            claimName: tempo-pvc

@@ -14,6 +14,8 @@ builder.Services.AddSwaggerGen();
 // Setup HTTP Client
 builder.Services.AddHttpClient();
 
+var otlpEndpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT") ?? "http://tempo-distributor:4317"; // Default to Tempo OTLP endpoint
+
 builder.Services.AddOpenTelemetry()
     .WithMetrics(x =>
     {
@@ -36,7 +38,7 @@ builder.Services.AddOpenTelemetry()
             .AddHttpClientInstrumentation()
             .AddOtlpExporter(otlpOptions =>
             {
-                otlpOptions.Endpoint = new Uri("http://tempo:4317"); // Update to your Tempo OTLP endpoint
+                otlpOptions.Endpoint = new Uri(otlpEndpoint); // Update to your Tempo OTLP endpoint
                 otlpOptions.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc; // default
             });
     });

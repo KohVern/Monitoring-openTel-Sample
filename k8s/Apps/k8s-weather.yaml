@@ -1,40 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: payment-api
+  name: weather-api
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "5180"
+    prometheus.io/port: "5170"
     prometheus.io/path: /metrics
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: payment-api
+      app: weather-api
   template:
     metadata:
       labels:
-        app: payment-api
+        app: weather-api
     spec:
       containers:
-      - name: payment-api
-        image: payment-api:latest
+      - name: weather-api
+        image: weather-api:latest
         imagePullPolicy: Never
         ports:
-        - containerPort: 5180
+        - containerPort: 5170
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: "Development"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://tempo-distributor:4317"  # Update to your Tempo
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: payment-api-service
+  name: weather-api-service
 spec:
   type: NodePort
   selector:
-    app: payment-api
+    app: weather-api
   ports:
-  - port: 5180
-    targetPort: 5180
-    nodePort: 30180  # External port (30000-32767 range)
+  - port: 5170
+    targetPort: 5170
+    nodePort: 30170  # External port (30000-32767 range)

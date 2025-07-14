@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tempo-query-frontend
+  labels:
+    app: tempo
+    component: query-frontend
+spec:
+  type: ClusterIP
+  selector:
+    app: tempo
+    component: query-frontend
+  ports:
+    - name: otlp-fe
+      port: 3200
+      targetPort: 3200
+    - name: otlp-grpc
+      port: 9095
+      targetPort: 9095
+    - name: memberlist
+      port: 7946
+      protocol: TCP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tempo-query-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tempo
+      component: query-frontend
+  template:
+    metadata:
+      labels:
+        app: tempo
+        component: query-frontend
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: tempo
+          image: grafana/tempo:latest
+          args:
+            - "-config.file=/etc/tempo/config.yaml"
+            - "-target=query-frontend"
+          ports:
+            - containerPort: 3200
+            - containerPort: 9095
+            - containerPort: 7946
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/tempo
+            - name: tempo-storage
+              mountPath: /tmp/tempo
+      volumes:
+        - name: config-volume
+          configMap:
+            name: tempo-config
+        - name: tempo-storage
+          persistentVolumeClaim:
+            claimName: tempo-pvc

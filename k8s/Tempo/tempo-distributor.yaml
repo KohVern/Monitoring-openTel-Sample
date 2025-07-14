@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tempo-distributor
+  labels:
+    app: tempo
+    component: distributor
+spec:
+  type: ClusterIP
+  selector:
+    app: tempo
+    component: distributor
+  ports:
+    - name: otlp-grpc
+      port: 4317
+      targetPort: 4317
+    - name: memberlist
+      port: 7946
+      protocol: TCP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tempo-distributor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tempo
+      component: distributor
+  template:
+    metadata:
+      labels:
+        app: tempo
+        component: distributor
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: tempo
+          image: grafana/tempo:latest
+          args:
+            - "-config.file=/etc/tempo/config.yaml"
+            - "-target=distributor"
+          ports:
+            - containerPort: 4317
+            - containerPort: 4318
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/tempo
+            - name: tempo-storage
+              mountPath: /tmp/tempo
+      volumes:
+        - name: config-volume
+          configMap:
+            name: tempo-config
+        - name: tempo-storage
+          persistentVolumeClaim:
+            claimName: tempo-pvc
