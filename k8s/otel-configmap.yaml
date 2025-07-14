@@ -5,13 +5,6 @@ metadata:
 data:
   config.yaml: |
     receivers:
-      otlp:
-        protocols:
-          grpc:
-            endpoint: 0.0.0.0:4317
-          http:
-            endpoint: 0.0.0.0:4318
-
       prometheus:
         config:
           scrape_configs:
@@ -46,9 +39,10 @@ data:
     exporters:
       prometheus:
         endpoint: "0.0.0.0:8889"
-
-      awsxray:
-        region: ap-southeast-1
+      otlp/tempo:
+        endpoint: tempo:4317  # e.g., tempo.default.svc.cluster.local:4317
+        tls:
+          insecure: true
 
     service:
       pipelines:
@@ -58,4 +52,4 @@ data:
 
         traces:
           receivers: [otlp]
-          exporters: [awsxray]
+          exporters: [otlp/tempo]
