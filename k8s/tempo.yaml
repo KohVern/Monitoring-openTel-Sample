@@ -122,6 +122,23 @@ data:
       compaction:
         block_retention: 1h
 
+    metrics_generator:
+      registry:
+        external_labels:
+          source: tempo
+          cluster: my-cluster
+      storage:
+        path: /tmp/tempo/generator/wal
+        remote_write:
+          - url: http://prometheus:9090/api/v1/write
+            send_exemplars: true
+    overrides:
+      defaults:
+        metrics_generator:
+          processors:
+            - service-graphs
+            - span-metrics
+
     query_frontend:
       search:
         duration_slo: 5s
