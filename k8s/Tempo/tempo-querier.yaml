@@ -42,6 +42,10 @@ spec:
       securityContext:
         runAsUser: 0
         runAsGroup: 0
+      initContainers:
+        - name: wait-for-fe
+          image: busybox
+          command: ["sh", "-c", "until nc -z tempo-query-frontend 9095; do echo waiting for tempo-frontend; sleep 2; done"]
       containers:
         - name: tempo
           image: grafana/tempo:latest

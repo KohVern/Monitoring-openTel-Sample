@@ -26,12 +26,16 @@ spec:
         - name: ASPNETCORE_ENVIRONMENT
           value: "Development"
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: "http://tempo-distributor:4317"  # Update to your Tempo
+          value: "http://otel-collector:4316"  # Update to your Tempo
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: payment-api-service
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "5180"
+    prometheus.io/path: /metrics
 spec:
   type: NodePort
   selector:

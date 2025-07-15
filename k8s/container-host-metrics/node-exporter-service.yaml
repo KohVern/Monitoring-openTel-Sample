@@ -4,6 +4,9 @@ metadata:
   annotations:
     kompose.cmd: /snap/kompose/19/kompose-linux-amd64 convert
     kompose.version: 1.21.0 (992df58d8)
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9100"
+    prometheus.io/path: /metrics
   creationTimestamp: null
   labels:
     io.kompose.service: node-exporter

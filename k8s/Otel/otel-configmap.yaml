@@ -8,23 +8,40 @@ data:
       prometheus:
         config:
           scrape_configs:
-            - job_name: 'weather-api'
-              static_configs:
-                - targets: ['weather-api-service.default.svc.cluster.local:5170']
-            - job_name: 'payment-api'
-              static_configs:
-                - targets: ['payment-api-service.default.svc.cluster.local:5180']
+          - job_name: 'kubernetes-services'
+            kubernetes_sd_configs:
+              - role: endpoints
+            relabel_configs:
+              - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+                action: keep
+                regex: true
+              - source_labels: [__meta_kubernetes_service_name]
+                regex: kube-dns
+                action: drop
+              - source_labels: [__meta_kubernetes_service_name]
+                target_label: kubernetes_service_name
+              - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+                action: replace
+                target_label: __metrics_path__
+                regex: (.+)
+                replacement: $1
+              - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+                action: replace
+                target_label: __address__
+                regex: (.+):(?:\d+);(\d+)
+                replacement: $1:$2
 
       otlp:
         protocols:
           http:
           grpc:
+            endpoint: 0.0.0.0:4316
 
     exporters:
       prometheus:
         endpoint: "0.0.0.0:8889"
       otlp/tempo:
-        endpoint: tempo:4317  # e.g., tempo.default.svc.cluster.local:4317
+        endpoint: tempo-distributor:4317  # e.g., tempo.default.svc.cluster.local:4317
         tls:
           insecure: true
 
