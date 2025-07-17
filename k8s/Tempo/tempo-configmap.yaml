@@ -42,9 +42,13 @@ data:
 
     storage:
       trace:
-        backend: local
-        local:
-          path: /tmp/tempo/traces
+        backend: s3
+        s3:
+            bucket: [bucket_name]
+            endpoint: s3.amazonaws.com
+            region: ap-southeast-1
+            access_key: [access_key]
+            secret_key: [secret_key]
 
     compactor:
       compaction:
@@ -78,17 +82,3 @@ data:
         frontend_address: tempo-query-frontend:9095
         dns_lookup_duration: 10s
         parallelism: 2
-
----
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: tempo-pvc
-spec:
-  accessModes:
-    - ReadWriteMany         # Or ReadWriteMany if multiple pods need access
-  resources:
-    requests:
-      storage: 5Gi
-  storageClassName: standard  # Or your cluster’s specific storage class

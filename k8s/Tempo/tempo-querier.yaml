@@ -59,12 +59,7 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: /etc/tempo
-            - name: tempo-storage
-              mountPath: /tmp/tempo
       volumes:
         - name: config-volume
           configMap:
             name: tempo-config
-        - name: tempo-storage
-          persistentVolumeClaim:
-            claimName: tempo-pvc
