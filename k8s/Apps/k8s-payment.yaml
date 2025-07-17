@@ -26,7 +26,7 @@ spec:
         - name: ASPNETCORE_ENVIRONMENT
           value: "Development"
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: "http://otel-collector:4316"  # Update to your Tempo
+          value: "http://tempo-distributor:4317"  # Update to your Tempo
 ---
 apiVersion: v1
 kind: Service
