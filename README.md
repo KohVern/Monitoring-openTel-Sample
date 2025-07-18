@@ -18,7 +18,7 @@ storage:
         endpoint: s3.amazonaws.com
         region: ap-southeast-1
         access_key: [access_key]
-        secret_key: [secret_key]```
+        secret_key: [secret_key]
 
 - Can be Deleted
 
@@ -29,3 +29,4 @@ volumes:
   - name: tempo-storage
     persistentVolumeClaim:
       claimName: tempo-pvc
+```
