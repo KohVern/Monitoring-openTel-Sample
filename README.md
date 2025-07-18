@@ -9,6 +9,7 @@ TODO:
 - Try to send to otel-col then tempo
 
 ## Add this for S3 implementation and delete PersistentVolume
+```cmd
 storage:
   trace:
     backend: s3
@@ -17,7 +18,7 @@ storage:
         endpoint: s3.amazonaws.com
         region: ap-southeast-1
         access_key: [access_key]
-        secret_key: [secret_key]
+        secret_key: [secret_key]```
 
 - Can be Deleted
 
