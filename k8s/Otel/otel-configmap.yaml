@@ -38,8 +38,8 @@ data:
             endpoint: 0.0.0.0:4316
 
     exporters:
-      prometheus:
-        endpoint: "0.0.0.0:8889"
+      prometheusremotewrite:
+        endpoint: "http://prometheus:9090/api/v1/write"
       otlp/tempo:
         endpoint: tempo-distributor:4317  # e.g., tempo.default.svc.cluster.local:4317
         tls:
@@ -49,7 +49,7 @@ data:
       pipelines:
         metrics:
           receivers: [prometheus]
-          exporters: [prometheus]
+          exporters: [prometheusremotewrite]
 
         traces:
           receivers: [otlp]
