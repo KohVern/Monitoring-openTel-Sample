@@ -1,0 +1,42 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-collector
+  namespace: default
+spec:
+  replicas: 2
+  mode: statefulset   # or statefulset if you want stable network IDs
+  targetAllocator:
+    enabled: true
+    prometheusCR:
+      enabled: true
+  config: |
+    receivers:
+      prometheus:
+        config:
+          scrape_configs: []   # empty, target allocator fills this dynamically
+
+      otlp:
+        protocols:
+          grpc:
+            endpoint: "0.0.0.0:4316"
+          http:
+
+    exporters:
+      prometheusremotewrite:
+        endpoint: "http://prometheus:9090/api/v1/write"
+      prometheus:
+        endpoint: "0.0.0.0:8889"
+      otlp/tempo:
+        endpoint: tempo-distributor:4317
+        tls:
+          insecure: true
+
+    service:
+      pipelines:
+        metrics:
+          receivers: [prometheus]
+          exporters: [prometheusremotewrite, prometheus]
+        traces:
+          receivers: [otlp]
+          exporters: [otlp/tempo]
