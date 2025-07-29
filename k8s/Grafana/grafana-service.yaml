@@ -40,6 +40,24 @@ data:
         isDefault: false
         version: 1
         editable: true
+        jsonData:
+          httpMethod: GET
+          nodeGraph:
+            enabled: true
+          serviceMap:
+            datasourceUid: 'Prometheus'
+          traceToMetrics:
+            datasourceUid: 'Prometheus'
+
+
+      - name: Loki
+        type: loki
+        access: proxy
+        orgId: 1
+        url: http://loki.default.svc.cluster.local:3100
+        isDefault: false
+        version: 1
+        editable: true
 
 ---
 

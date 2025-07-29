@@ -6,7 +6,7 @@ kubectl delete -R -f .
 # Otel-collector
 ## Steps
 ```cmd 
-kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemetry-operator.yaml 
+./apply.ps1
 ```
 - Apply the Otel folder contents into kubernetes.
 - Add ServiceMonitoring to the monitoring folder
