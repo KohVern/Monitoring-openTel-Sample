@@ -1,12 +1,17 @@
-﻿## Apply/Delete
-```cmd
-kubectl apply -R -f . 
-kubectl delete -R -f .
-```
+﻿# Commands
+## Apply/Delete
+- `docker build -t [service]:latest .`
+- `minikube image load [service]:latest`
+- `kubectl apply -R -f . `
+- `kubectl delete -R -f .`
+- `kubectl port-forward deployments/grafana 3000:3000`
 # Otel-collector
 ## Steps
-```cmd 
-./apply.ps1
+- Ensure docker desktop is on
+- Have minikube
+```cmd
+./start.ps1
+./stop.ps1
 ```
 - Apply the Otel folder contents into kubernetes.
 - Add ServiceMonitoring to the monitoring folder
@@ -25,9 +30,11 @@ kubectl patch opentelemetrycollector otel-collector -n default --type=merge -p '
 
 ```
 
-TODO:
-- Try implement CR locally for easy startup
-- Add More Service Monitoring
+# Grafana - Dashboards
+- Obtain dashboard .json files
+- Put inside 'k8s/Grafana/dashboards'
+- Run `./add-dashboard.ps1`
+- `grafana-dashboard.yaml` should be updated
 
 # S3 implementation
 ```
